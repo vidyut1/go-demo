@@ -74,7 +74,6 @@ func Sync(w http.ResponseWriter, r *http.Request) {
 	}
 	wg.Wait()
 	elaspsed := time.Now().Sub(timeStart)
-	defer DB.Close()
 	log.Println(elaspsed)
 	fmt.Fprintf(w, "processed ", int64(elaspsed/time.Nanosecond))
 }
@@ -82,11 +81,11 @@ func Sync(w http.ResponseWriter, r *http.Request) {
 //function used by go routine
 //to save user in db
 func saveUserInDb(user User, wg *sync.WaitGroup) {
-	stmt, err := DB.Prepare("insert into users (id, name) values(?,?);")
+	stmt, err := DB.Prepare("insert into users (name) values(?);")
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	_, err = stmt.Exec(user.Id, user.Name)
+	_, err = stmt.Exec(user.Name)
 	if err != nil {
 		fmt.Print(err.Error())
 	}
@@ -96,11 +95,11 @@ func saveUserInDb(user User, wg *sync.WaitGroup) {
 //function used by go routine
 //to save hotelbooking in db
 func savehotelBookingInDb(hotelBooking HotelBooking, wg *sync.WaitGroup) {
-	stmt, err := DB.Prepare("insert into hotel_bookings (id, user_id, booking_date) values(?,?,?);")
+	stmt, err := DB.Prepare("insert into hotel_bookings (user_id, booking_date) values(?,?);")
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	_, err = stmt.Exec(hotelBooking.Id, hotelBooking.UserId, hotelBooking.BookingDate)
+	_, err = stmt.Exec(hotelBooking.UserId, hotelBooking.BookingDate)
 	if err != nil {
 		fmt.Print(err.Error())
 	}

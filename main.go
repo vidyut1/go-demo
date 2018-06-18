@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"time"
 	"sync"
+	"strconv"
 )
 
 var DB *sql.DB
@@ -23,7 +24,7 @@ func initDb() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	db.SetMaxOpenConns(100)
+	db.SetMaxOpenConns(10)
 	DB = db
 }
 
@@ -76,7 +77,7 @@ func Sync(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	elaspsed := time.Now().Sub(timeStart)
 	log.Println(elaspsed)
-	fmt.Fprintf(w, "processed ", int64(elaspsed/time.Nanosecond))
+	fmt.Fprintf(w, "processed " + strconv.FormatInt(int64(elaspsed/time.Nanosecond), 10))
 }
 
 //function used by go routine

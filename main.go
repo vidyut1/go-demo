@@ -23,6 +23,7 @@ func initDb() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	db.SetMaxOpenConns(100)
 	DB = db
 }
 

@@ -77,7 +77,7 @@ func Sync(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	elaspsed := time.Now().Sub(timeStart)
 	log.Println(elaspsed)
-	fmt.Fprintf(w, "processed " + strconv.FormatInt(int64(elaspsed/time.Nanosecond), 10))
+	fmt.Fprintf(w, "processed go " + strconv.FormatInt(int64(elaspsed/time.Nanosecond), 10))
 }
 
 //function used by go routine
